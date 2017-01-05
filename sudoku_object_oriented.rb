@@ -10,29 +10,18 @@ class Board
     return array.sort == [1, 2, 3, 4, 5, 6, 7, 8, 9]
   end
 
-  def create_rows(board, arrays_to_validate)
+  def create_rows_and_columns(board, arrays_to_validate)
     i = 0
     while i < 9 do
       row = []
-      j = 0
-      while j < 9 do
-        row << board[i][j]
-        j += 1
-      end
-      arrays_to_validate << row
-      i += 1
-    end
-  end
-
-  def create_columns(board, arrays_to_validate)
-    i = 0
-    while i < 9 do
       column = []
       j = 0
       while j < 9 do
+        row << board[i][j]
         column << board[j][i]
         j += 1
       end
+      arrays_to_validate << row
       arrays_to_validate << column
       i += 1
     end
@@ -66,8 +55,7 @@ class Board
 
   def validate
     arrays_to_validate = []
-    create_rows(board, arrays_to_validate)
-    create_columns(board, arrays_to_validate)
+    create_rows_and_columns(board, arrays_to_validate)
     create_squares(board, arrays_to_validate)
     arrays_to_validate.each do |array|
       if not valid?(array)
@@ -104,7 +92,6 @@ invalid_board = Board.new([
   [6,7,8,9,1,2,3,4,5],
   [9,1,2,3,4,5,6,7,8]
 ])
-
 
 valid_board.validate
 invalid_board.validate
