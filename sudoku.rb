@@ -1,19 +1,33 @@
-require 'pry'
-
-board = [
-  [1,2,3,4,5,6,7,8,9],
-  [4,5,6,7,7,9,1,2,3],
-  [7,8,9,1,2,3,4,5,6],
-  [2,3,4,5,6,7,8,9,1],
-  [5,6,7,8,9,1,2,3,4],
-  [8,9,1,2,3,4,5,6,7],
-  [3,4,5,6,7,8,9,1,2],
-  [6,7,8,9,1,2,3,4,5],
-  [9,1,2,3,4,5,6,7,8]
-]
-
 def valid?(array)
   return array.sort == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+end
+
+def create_rows(board, arrays_to_validate)
+  i = 0
+  while i < 9 do
+    row = []
+    j = 0
+    while j < 9 do
+      row << board[i][j]
+      j += 1
+    end
+    arrays_to_validate << row
+    i += 1
+  end
+end
+
+def create_columns(board, arrays_to_validate)
+  i = 0
+  while i < 9 do
+    column = []
+    j = 0
+    while j < 9 do
+      column << board[j][i]
+      j += 1
+    end
+    arrays_to_validate << column
+    i += 1
+  end
 end
 
 def create_square(board, row_index, column_index)
@@ -30,71 +44,57 @@ def create_square(board, row_index, column_index)
   return square
 end
 
-def test_squares(board)
-  array_of_squares = []
-  array_of_squares << create_square(board, 0, 0)
-  array_of_squares << create_square(board, 3, 0)
-  array_of_squares << create_square(board, 6, 0)
-  array_of_squares << create_square(board, 0, 3)
-  array_of_squares << create_square(board, 3, 3)
-  array_of_squares << create_square(board, 6, 3)
-  array_of_squares << create_square(board, 0, 6)
-  array_of_squares << create_square(board, 3, 6)
-  array_of_squares << create_square(board, 6, 6)
-  array_of_squares.each do |square|
-    if valid?(square)
-      puts "valid square"
-    else
-      puts "invalid square"
+def create_squares(board, arrays_to_validate)
+  arrays_to_validate << create_square(board, 0, 0)
+  arrays_to_validate << create_square(board, 3, 0)
+  arrays_to_validate << create_square(board, 6, 0)
+  arrays_to_validate << create_square(board, 0, 3)
+  arrays_to_validate << create_square(board, 3, 3)
+  arrays_to_validate << create_square(board, 6, 3)
+  arrays_to_validate << create_square(board, 0, 6)
+  arrays_to_validate << create_square(board, 3, 6)
+  arrays_to_validate << create_square(board, 6, 6)
+end
+
+def validate_board(board)
+  arrays_to_validate = []
+  create_rows(board, arrays_to_validate)
+  create_columns(board, arrays_to_validate)
+  create_squares(board, arrays_to_validate)
+  arrays_to_validate.each do |array|
+    if not valid?(array)
+      puts "Board is not valid!"
       return false
     end
   end
+  puts "Board is valid!"
 end
 
-def test_columns(board)
-  i = 0
-  while i < 9 do
-    column = []
-    j = 0
-    while j < 9 do
-      column << board[j][i]
-      j += 1
-    end
-    print column
-    if valid?(column)
-      puts "valid column"
-      i += 1
-    else
-      puts "invalid column"
-      return false
-    end
-  end
-end
 
-def test_rows(board)
-  i = 0
-  while i < 9 do
-    row = []
-    j = 0
-    while j < 9 do
-      row << board[i][j]
-      j += 1
-    end
-    print row
-    if valid?(row)
-      puts "valid row"
-      i += 1
-    else
-      puts "invalid row"
-      return false
-    end
-  end
-end
 
-def test_board(board)
-  test_rows(board)
-  test_columns(board)
-  test_squares(board)
-end
+valid_board = [
+  [1,2,3,4,5,6,7,8,9],
+  [4,5,6,7,8,9,1,2,3],
+  [7,8,9,1,2,3,4,5,6],
+  [2,3,4,5,6,7,8,9,1],
+  [5,6,7,8,9,1,2,3,4],
+  [8,9,1,2,3,4,5,6,7],
+  [3,4,5,6,7,8,9,1,2],
+  [6,7,8,9,1,2,3,4,5],
+  [9,1,2,3,4,5,6,7,8]
+]
 
-test_board(board)
+invalid_board = [
+  [1,2,3,4,5,6,7,8,9],
+  [4,5,6,7,8,9,1,2,3],
+  [7,8,9,1,2,3,4,5,6],
+  [2,3,4,5,6,7,8,9,1],
+  [5,6,7,8,9,1,2,3,4],
+  [8,9,1,2,3,4,5,6,7],
+  [3,4,5,6,7,8,9,1,2],
+  [6,7,8,9,1,2,3,4,5],
+  [9,1,2,3,4,5,6,7,9]
+]
+
+validate_board(valid_board)
+validate_board(invalid_board)
