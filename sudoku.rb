@@ -91,6 +91,10 @@ def test_rows(board)
   end
 end
 
-test_rows(board)
-test_columns(board)
-test_squares(board)
+def test_board(board)
+  test_rows(board)
+  test_columns(board)
+  test_squares(board)
+end
+
+test_board(board)
